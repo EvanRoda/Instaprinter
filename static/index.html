@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/base.css" rel="stylesheet" media="screen">
+    <script src="bootstrap/js/jquery-2.1.0.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+</head>
+<body>
+    <div class="container padded">
+        <div class="jumbotron">
+            <h1>Hello, I'am Instaprinter!</h1>
+            <p>...</p>
+            <p><button id="get_button" class="btn btn-primary btn-lg" role="button">Get Photos!!</button></p>
+        </div>
+        <div class="row photos">
+            <div class="col-xs-12">
+                <h2>Choose photo</h2>
+            </div>
+        </div>
+        <div class="row photos" id="photos">
+            <div id="photo_list" class="col-xs-12"></div>
+        </div>
+
+        <div class="row one_photo">
+            <div id="photo_wrap" class="col-xs-12 text-center"></div>
+        </div>
+        <div class="row one_photo">
+            <div class="col-xs-12 text-center">
+                <button id="print_photo" class="btn btn-info btn-lg">Print</button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/client.js"></script>
+</body>
+</html>
