@@ -13,7 +13,7 @@ $('.one_photo').hide();
 
 socket.on('hello', function(data){
     $('#get_button').click(function(){
-        socket.emit('getPhoto');
+        socket.emit('start');
         console.log('Получить фотки');
     });
 
