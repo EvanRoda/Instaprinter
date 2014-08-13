@@ -4,6 +4,7 @@ var path = require('path');
 var _ = require('lodash');
 var fs = require('fs');
 var gm = require('gm');
+var moment = require('moment');
 
 var file = null;
 var request = null;
@@ -20,7 +21,6 @@ var server = http.createServer(app);
 var forPrint = [];
 var lastID = '';
 var theEnd = false;
-//var photos = [];
 var params = {};
 
 var io;
@@ -33,6 +33,40 @@ server.listen(3000, function(){
 
 io = require('socket.io').listen(server);
 
+function createImage(photo){
+    console.log('CREATE_FILE', photo);
+
+    var created_time = moment().format('DD.MM.YY');
+
+    gm(photo.caption.from.profile_picture)
+        .resize(81, 81)
+        .noProfile()
+        .extent(640)
+        .fill('#5e5e5e')
+        .fontSize(18)
+        .font('Open Sans')
+        .drawText(108, 15, photo.user.username)
+        .drawText(0, 15, created_time+'', 'NorthEast')
+        .write("avatar.jpg", function (err) {
+            if(!err){
+                gm("b28.jpg")
+                    .append("avatar.jpg")
+                    .append("b28.jpg")
+                    .append(photo.images.standard_resolution.url)
+                    .append("b28.jpg")
+                    .append("b27.jpg")
+                    .append("Instaramka.jpg")
+                    .append("b27.jpg")
+                    .append("b28.jpg")
+                    .matteColor('white')
+                    .frame(27, 0, 0, 0)
+                    .write("images/" + photo.id + ".jpg", function (err) {
+                        if (!err) console.log('done');
+                    });
+            }
+        });
+}
+
 io.sockets.on('connection', function(socket){
     socket.emit('hello', {});
 
@@ -43,14 +77,8 @@ io.sockets.on('connection', function(socket){
             //IDwedding2014
             //superpupermegatest
             ig.tag_media_recent('superpupermegatest', function(err, medias, pagination, limit){
-                //photos = medias;
 
                 console.log('LASTID', lastID);
-                //console.log('PAGINATION', pagination);
-
-                /*if(pagination.next_max_id){
-                    params = {max_id: pagination.next_max_id};
-                }*/
                 console.log('GET_MEDIA', medias.length);
 
                 theEnd = false;
@@ -64,32 +92,19 @@ io.sockets.on('connection', function(socket){
 
                 forPrint = theEnd ? forPrint : [];
 
-                //forPrint = photos.slice(0, newCount - count);
+                if(forPrint.length){
+                    socket.emit('printedFotos', forPrint);
+                }
 
                 console.log('FOR_PRINT', forPrint.length);
 
                 forPrint.forEach(function(photo){
                     if(photo.type == "image"){
-
-                        console.log('CREATE_FILE', photo);
-
-                        photo.file = fs.createWriteStream(photo.id + ".jpg");
-                        request = http.get(photo.images.standard_resolution.url, function(response){
-                            gm(response)
-                                .matteColor('white')
-                                .extent(640, 790)
-                                .frame(10, 100, 0, 0)
-                                .stream(function (err, stdout, stderr) {
-                                    stdout.pipe(photo.file);
-                                });
-                        });
+                        createImage(photo);
                     }
                 });
 
                 lastID = medias[0].id;
-                /*photos.forEach(function(photo){
-                    console.log(photo.id);
-                });*/
             });
         }, 5000);
     });

@@ -20,6 +20,10 @@ socket.on('hello', function(data){
     $('.jumbotron').show();
 });
 
+socket.on('printedFotos', function(data){
+    console.log(data);
+});
+
 socket.on('photos', function(data){
     $('.jumbotron').hide();
     $('.photos').show();
