@@ -44,26 +44,25 @@ function createImage(photo){
         .extent(640)
         .fill('#5e5e5e')
         .fontSize(18)
-        .font('Open Sans')
+        //.font('Open Sans')
         .drawText(108, 15, photo.user.username)
         .drawText(0, 15, created_time+'', 'NorthEast')
-        .write("avatar.jpg", function (err) {
-            if(!err){
-                gm("b28.jpg")
-                    .append("avatar.jpg")
-                    .append("b28.jpg")
-                    .append(photo.images.standard_resolution.url)
-                    .append("b28.jpg")
-                    .append("b27.jpg")
-                    .append("Instaramka.jpg")
-                    .append("b27.jpg")
-                    .append("b28.jpg")
-                    .matteColor('white')
-                    .frame(27, 0, 0, 0)
-                    .write("images/" + photo.id + ".jpg", function (err) {
-                        if (!err) console.log('done');
-                    });
-            }
+        .write("avatar.jpg", function () {
+            console.log('done1');
+            gm("b28.jpg")
+                .append("avatar.jpg")
+                .append("b28.jpg")
+                .append(photo.images.standard_resolution.url)
+                .append("b28.jpg")
+                .append("b27.jpg")
+                .append("Instaramka.jpg")
+                .append("b27.jpg")
+                .append("b28.jpg")
+                .matteColor('white')
+                .frame(27, 0, 0, 0)
+                .write("images/" + photo.id + ".jpg", function (err) {
+                    console.log('done2');
+                });
         });
 }
 
